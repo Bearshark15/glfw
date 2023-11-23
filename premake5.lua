@@ -1,6 +1,7 @@
 project "GLFW"
 	kind "StaticLib"
 	language "C"
+	staticruntime "on"
 
 	targetdir ("build/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -26,7 +27,6 @@ project "GLFW"
 
 	filter "system:windows"
 		systemversion "latest"
-        staticruntime "On"
 
 		files
 		{
@@ -49,7 +49,7 @@ project "GLFW"
 		}
 
 	filter "configurations:Debug"
-		buildoptions "/MDd"
+		buildoptions "/MTd"
 		runtime "Debug"
 		symbols "on"
 
@@ -60,12 +60,6 @@ project "GLFW"
 		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
 	filter "configurations:Release"
-		buildoptions "/MD"
+		buildoptions "/MT"
 		runtime "Release"
-		optimize "speed"
-
-    filter "configurations:Dist"
-		buildoptions "/MD"
-		runtime "Release"
-		optimize "speed"
-        symbols "off"
+		optimize "on"
