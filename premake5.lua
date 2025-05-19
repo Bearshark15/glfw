@@ -1,13 +1,15 @@
-project "GLFW"
+include "../../Premake/common.lua"
+
+project "glfw"
+	location "."
 	kind "StaticLib"
 	language "C"
 	staticruntime "on"
 
-	targetdir ("build/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin/" .. outputdir .. "/%{prj.name}")
+	targetdir (dirs.build .. outputdir .. "/%{prj.name}")
+	objdir (dirs.bin .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files {
 		"include/GLFW/glfw3.h",
 		"include/GLFW/glfw3native.h",
 		"src/context.c",
@@ -28,8 +30,7 @@ project "GLFW"
 	filter "system:windows"
 		systemversion "latest"
 
-		files
-		{
+		files {
 			"src/win32_init.c",
 			"src/win32_joystick.c",
 			"src/win32_module.c",
@@ -42,8 +43,7 @@ project "GLFW"
 			"src/osmesa_context.c"
 		}
 
-		defines 
-		{ 
+		defines { 
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
@@ -53,13 +53,18 @@ project "GLFW"
 		runtime "Debug"
 		symbols "on"
 
+	filter "configurations:Release"
+		buildoptions "/MT"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Retail"
+		buildoptions "/MT"
+		runtime "Release"
+		optimize "Full"
+
 	filter { "system:windows", "configurations:Debug-AS" }	
 		runtime "Debug"
 		symbols "on"
 		sanitize { "Address" }
 		flags { "NoRuntimeChecks", "NoIncrementalLink" }
-
-	filter "configurations:Release"
-		buildoptions "/MT"
-		runtime "Release"
-		optimize "on"
